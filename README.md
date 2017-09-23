@@ -8,12 +8,20 @@ $ npm install -g @angular/cli
 $ npm install -g sails
 ```
 
-### Run
+### Running Backend
 
 ```sh
+$ cd backend
 $ sails lift
 ```
 
-In your browser, go to http://localhost:3000
+### Running Frontend
+
+```sh
+$ cd frontend
+$ ng serve
+```
+
+Once everything is up & running, in your browser, go to http://localhost:3000
 
 Have fun!!
