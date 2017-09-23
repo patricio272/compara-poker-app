@@ -26,6 +26,6 @@ $ cd frontend
 $ ng serve
 ```
 
-Once everything is up & running, in your browser, go to http://localhost:3000
+Once everything is up & running, in your browser, go to http://localhost:4200
 
 Have fun!!
