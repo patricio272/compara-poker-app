@@ -6,6 +6,7 @@ ComparaOnline Poker WebApp made with Node.js v7.4.0, Sails.js v0.12.13 & @angula
 ```sh
 $ npm install -g @angular/cli
 $ npm install -g sails
+$ git checkout development
 $ cd backend && npm install
 $ cd ..
 $ cd frontend && npm install
