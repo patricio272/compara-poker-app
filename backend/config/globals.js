@@ -10,6 +10,13 @@
  */
 module.exports.globals = {
 
+  endpoints: {
+    deckReset: 'https://services.comparaonline.com/dealer/deck',
+    deckDeal: 'https://services.comparaonline.com/dealer/deck/{TOKEN}/deal/{AMOUNT}'
+  },
+  retryTimeout: 1000,
+  dealAmountOfCards: 10
+
   /****************************************************************************
   *                                                                           *
   * Expose the lodash installed in Sails core as a global variable. If this   *

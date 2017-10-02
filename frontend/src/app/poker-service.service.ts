@@ -12,8 +12,8 @@ export class PokerServiceService {
 
   constructor(private http: Http) { }
 
-  test() {
-    return this.http.post(endpoints.test, '', '').toPromise().then((response: Response) => {
+  deckReset() {
+    return this.http.post(endpoints.deckReset, '', '').toPromise().then((response: Response) => {
       return Promise.resolve(response.json());
     }, (error: Response) => {
       return Promise.reject(error.json());

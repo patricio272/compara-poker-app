@@ -1,1 +1,57 @@
-/* You can add global styles to this file, and also import other style files */
+.button {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  outline: none;
+  color: #000;
+  background-color: #4fcc34;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px #999;
+}
+
+.button:hover {background-color: #48a82d}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(4px);
+}
+
+.buttons-wrapper {
+  margin: 0 auto;
+  width: auto;
+}
+
+.loading-text {
+  color: #ffffff;
+  font-weight: 600;
+  left: 0;
+  line-height: 200px;
+  margin-top: -100px;
+  position: fixed;
+  text-align: center;
+  top: 60%;
+  width: 100%;
+  z-index: 9999;
+}
+
+.loading:after {
+  content: "";
+  position: fixed;
+  top: -300%;
+  left: -300%;
+  right: -300%;
+  bottom: -300%;
+  z-index: 9999;
+  pointer-events: all;
+  background-color: rgba(0,0,0,0.6);
+  background-image: url(assets/img/loadingIconAnimated.gif);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 120px 120px;
+}

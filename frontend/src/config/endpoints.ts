@@ -1,3 +1,3 @@
 export const endpoints = {
-  test: 'http://localhost:3000/test'
+  deckReset: 'http://localhost:3000/deck/reset'
 };

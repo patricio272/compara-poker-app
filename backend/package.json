@@ -20,5 +20,8 @@
     "url": "git://github.com/patricio/backend.git"
   },
   "author": "patricio",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "winston": "^2.3.1"
+  }
 }

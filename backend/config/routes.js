@@ -31,7 +31,8 @@ module.exports.routes = {
    * `assets` directory)                                                      *
    *                                                                          *
    ***************************************************************************/
-  'POST /test' : 'MainController.test'
+  'POST /deck/reset' : 'MainController.deckReset',
+  'GET /deck/:deckHash/deal' : 'MainController.deckDeal'
   /***************************************************************************
    *                                                                          *
    * Custom routes here...                                                    *
