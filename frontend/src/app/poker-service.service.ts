@@ -20,4 +20,12 @@ export class PokerServiceService {
     });
   }
 
+  deckDeal(token) {
+    return this.http.get(endpoints.deckDeal.replace('{TOKEN}', token)).toPromise().then((response: Response) => {
+      return Promise.resolve(response.json());
+    }, (error: Response) => {
+      return Promise.reject(error.json());
+    });
+  }
+
 }

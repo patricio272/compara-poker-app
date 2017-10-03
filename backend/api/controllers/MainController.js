@@ -44,7 +44,7 @@ function sendGetRequest(url, callback) {
       }, sails.config.globals.retryTimeout);
     }
     if (!error) {
-      if (response.statusCode === 200 || response.statusCode === 404 || response.statusCode === 405) {
+      if (response.statusCode === 200 || response.statusCode === 404 || response.statusCode === 405 || response.statusCode === 400) {
         return callback({
           statusCode: response.statusCode,
           body: body
@@ -66,6 +66,7 @@ const MainController = {
       logger.log('debug', '[MainController][deckReset]: Success, TOKEN: %s', responseObj.body.toString());
       res.statusCode = responseObj.statusCode;
       return res.json({
+        code: res.statusCode,
         deckHash: responseObj.body.toString()
       });
     });
@@ -74,10 +75,11 @@ const MainController = {
     const token = req.params.deckHash;
     sendGetRequest(sails.config.globals.endpoints.deckDeal.replace('{TOKEN}', token)
       .replace('{AMOUNT}', sails.config.globals.dealAmountOfCards), (responseObj) => {
-      logger.log('debug', '[MainController][deckDeal]: Success, Cards: %s', responseObj.body.toString());
+      logger.log('debug', '[MainController][deckDeal]: Success, Result: %s', responseObj.body.toString());
       res.statusCode = responseObj.statusCode;
       return res.json({
-        deckHash: responseObj.body.toString()
+        code: res.statusCode,
+        cards: JSON.parse(responseObj.body)
       });
     });
   }
