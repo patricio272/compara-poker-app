@@ -8,8 +8,8 @@ The backend was made with Sails.js for 2 reasons:
 ### Installation
 
 ```sh
-$ npm install -g @angular/cli
-$ npm install -g sails
+$ sudo npm install -g @angular/cli
+$ sudo npm install -g sails
 $ git checkout development
 $ cd backend && npm install
 $ cd ..
