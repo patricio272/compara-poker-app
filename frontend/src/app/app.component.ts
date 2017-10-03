@@ -10,6 +10,7 @@ import { PokerServiceService } from './poker-service.service';
 export class AppComponent implements OnInit {
   loading = false;
   loadingMsg = 'Loading...';
+  deckHash = '';
 
   constructor(private pokerService: PokerServiceService) {
 
@@ -24,14 +25,17 @@ export class AppComponent implements OnInit {
     this.pokerService.deckReset()
       .then(
         (response) => {
-        console.log(response.deckHash);
+        this.deckHash = response.deckHash;
         this.loading = false;
         }, (error) => {
-          console.log('error: ' + JSON.stringify(error)); // Gotta be removed
-          // Todo: Retry request
+          setTimeout(() => {
+            this.deckReset();
+          }, 1000);
         }
       ).catch((error) => {
-      // Todo: Retry request
+      setTimeout(() => {
+        this.deckReset();
+      }, 1000);
     });
   }
 

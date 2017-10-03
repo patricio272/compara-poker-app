@@ -11,10 +11,10 @@ function sendPostRequest(url, callback) {
   logger.log('debug', '[MainController][sendPostRequest]: Hitting %s', url);
   request.post({
     url: url
-  }, function(error, response, body) {
+  }, (error, response, body) => {
     if (error) {
       logger.log('debug', '[MainController][sendPostRequest]: Error %j; Retrying', error);
-      setTimeout(function () {
+      setTimeout(() => {
         return sendPostRequest(url, callback);
       }, sails.config.globals.retryTimeout);
     }
@@ -24,42 +24,45 @@ function sendPostRequest(url, callback) {
         body: body
       });
     }
-    logger.log('debug', '[MainController][deckReset]: Deal Service failed with statusCode: %s & this body: %s; Retrying',
+    logger.log('debug', '[MainController][deckReset]: Dealer Service failed with statusCode: %s & this body: %s; Retrying',
       response.statusCode, body);
-    setTimeout(function () {
+    setTimeout(() => {
       return sendPostRequest(url, callback);
     }, sails.config.globals.retryTimeout);
   });
 }
 
 function sendGetRequest(url, callback) {
-  logger.log('debug', '[MainController][sendPostRequest]: Hitting %s', url);
-  request.post({
+  logger.log('debug', '[MainController][sendGetRequest]: Hitting %s', url);
+  request.get({
     url: url
-  }, function(error, response, body) {
+  }, (error, response, body) => {
     if (error) {
-      logger.log('debug', '[MainController][sendPostRequest]: Error %j; Retrying', error);
-      setTimeout(function () {
-        return sendPostRequest(url, callback);
+      logger.log('debug', '[MainController][sendGetRequest]: Error %j; Retrying', error);
+      setTimeout(() => {
+        return sendGetRequest(url, callback);
       }, sails.config.globals.retryTimeout);
     }
-    if (!error && response.statusCode === 200) {
-      return callback({
-        statusCode: response.statusCode,
-        body: body
-      });
+    if (!error) {
+      if (response.statusCode === 200 || response.statusCode === 404 || response.statusCode === 405) {
+        return callback({
+          statusCode: response.statusCode,
+          body: body
+        });
+      } else {
+        logger.log('debug', '[MainController][deckDeal]: Dealer Service failed with statusCode: %s & this' +
+          ' body: %s; Retrying', response.statusCode, body);
+        setTimeout(() => {
+          return sendGetRequest(url, callback);
+        }, sails.config.globals.retryTimeout);
+      }
     }
-    logger.log('debug', '[MainController][deckReset]: Deal Service failed with statusCode: %s & this body: %s; Retrying',
-      response.statusCode, body);
-    setTimeout(function () {
-      return sendPostRequest(url, callback);
-    }, sails.config.globals.retryTimeout);
   });
 }
 
 const MainController = {
   deckReset: function(req, res){
-    sendPostRequest(sails.config.globals.endpoints.deckReset, function(responseObj) {
+    sendPostRequest(sails.config.globals.endpoints.deckReset, (responseObj) => {
       logger.log('debug', '[MainController][deckReset]: Success, TOKEN: %s', responseObj.body.toString());
       res.statusCode = responseObj.statusCode;
       return res.json({
@@ -68,8 +71,10 @@ const MainController = {
     });
   },
   deckDeal: function(req, res){
-    sendGetRequest(sails.config.globals.endpoints.deckDeal, function(responseObj) {
-      logger.log('debug', '[MainController][deckDeal]: Success, TOKEN: %s', responseObj.body.toString());
+    const token = req.params.deckHash;
+    sendGetRequest(sails.config.globals.endpoints.deckDeal.replace('{TOKEN}', token)
+      .replace('{AMOUNT}', sails.config.globals.dealAmountOfCards), (responseObj) => {
+      logger.log('debug', '[MainController][deckDeal]: Success, Cards: %s', responseObj.body.toString());
       res.statusCode = responseObj.statusCode;
       return res.json({
         deckHash: responseObj.body.toString()
