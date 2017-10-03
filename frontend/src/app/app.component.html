@@ -13,17 +13,31 @@
 </div>
 <div class="buttons-wrapper" style="display: block">
   <div style="float: left">
-    <button class="button" (click)="deckDeal()">
-      <img width="30" style="vertical-align: middle" src="../assets/img/dealIcon.png">Deal Next Hand
-    </button>
-  </div>
-  <div style="float: right">
     <button class="button" (click)="deckReset()">
       <img width="30" style="vertical-align: middle" src="../assets/img/shuffleIcon.png">Shuffle Deck
     </button>
   </div>
+  <div style="float: right">
+    <button class="button" (click)="deckDeal()">
+      <img width="30" style="vertical-align: middle" src="../assets/img/dealIcon.png">Deal Next Hand
+    </button>
+  </div>
 </div>
+
 <div style="margin-top: 100px;"></div>
-<div [ngClass]="{'alert alert-danger' : (errorMessage !== '')}" class="buttons-wrapper" style="text-align: center">
+<div *ngIf="errorMessage !== ''" [ngClass]="{'alert alert-danger' : (errorMessage !== '')}" class="buttons-wrapper" style="text-align: center">
   {{errorMessage}}
+</div>
+<div *ngIf="resultMessage !== ''" [ngClass]="{'alert alert-success' : (resultMessage !== '')}" class="buttons-wrapper" style="text-align: center">
+  {{resultMessage}}
+</div>
+
+<div style="margin-top: 100px;"></div>
+<div class="buttons-wrapper" style="display: block">
+  <div style="float: left">
+
+  </div>
+  <div style="float: right">
+
+  </div>
 </div>

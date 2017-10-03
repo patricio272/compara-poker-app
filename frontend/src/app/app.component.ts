@@ -14,6 +14,9 @@ export class AppComponent implements OnInit {
   loadingMsg = 'Loading...';
   deckHash = 'xxx';
   cards = [];
+  leftHand = this.createHand('Left Hand');
+  rightHand = this.createHand('Right Hand');
+  resultMessage = '';
   errorMessage = '';
   errorList = {
     arr: {
@@ -31,6 +34,19 @@ export class AppComponent implements OnInit {
 
   }
 
+  createHand(name) {
+    return {
+      name: name,
+      cardsArr: [],
+      handRanking: {}
+    };
+  }
+
+  preRequestCleansing() {
+    this.loading = true;
+    this.errorMessage = '';
+  }
+
   errorHandler(error) {
     if (!isNullOrUndefined(error.code) && error.code !== '') {
       const code = error.code.toString();
@@ -46,9 +62,53 @@ export class AppComponent implements OnInit {
     return (error.isTrusted === true);
   }
 
+  checkSameSuit(cardsArr) {
+    let isSameSuit = true;
+    const suit = cardsArr[0].suit;
+    for (let i = 1; i < cardsArr.length; i++) {
+      if (cardsArr[i].suit !== suit) {
+        isSameSuit = false;
+        break;
+      }
+    }
+    return isSameSuit;
+  }
+
+  sortByKey(array, key) {
+    return array.sort(function(a, b) {
+      const x = a[key];
+      const y = b[key];
+      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+  }
+
+  valuateUnsortedHand(hand) {
+    for ( let i = 0; i < hand.cardsArr.length; i++) {
+      for ( let j = 0; j < constants.cardValueArr.length; j++) {
+        if (hand.cardsArr[i].number === constants.cardValueArr[j].number) {
+          hand.cardsArr[i].value = constants.cardValueArr[j].value;
+          break;
+        }
+      }
+    }
+  }
+
+  rankHand(hand) {
+    this.valuateUnsortedHand(hand);
+    this.sortByKey(hand.cardsArr, 'value');
+    console.log('leftHand:' + JSON.stringify(hand, null, 2));
+  }
+
+  assignHands() {
+    const halfLength = Math.ceil(this.cards.length / 2);
+    this.leftHand.cardsArr = this.cards.splice(0, halfLength);
+    this.rightHand.cardsArr = this.cards;
+    this.rankHand(this.leftHand);
+    // this.rankHand(this.rightHand);
+  }
+
   deckReset() {
-    this.loading = true;
-    this.errorMessage = '';
+    this.preRequestCleansing();
     this.pokerService.deckReset()
       .then(
         (response) => {
@@ -71,13 +131,13 @@ export class AppComponent implements OnInit {
   }
 
   deckDeal() {
-    this.loading = true;
-    this.errorMessage = '';
+    this.preRequestCleansing();
     this.pokerService.deckDeal(this.deckHash)
       .then(
         (response) => {
           this.cards = response.cards;
           this.loading = false;
+          this.assignHands();
         }, (error) => {
           if (this.isBackendConnectionError(error)) {
             setTimeout(() => {
